@@ -30,9 +30,24 @@ const propertySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  totalPrice: {
+    type: String,
+  },
+  paidPrice: {
+    type: String,
+  },
+  overPrice: {
+    type: String,
+  },
   area: {
     type: String,
     required: true,
+  },
+  landArea: {
+    type: String,
+  },
+  buildingArea: {
+    type: String,
   },
   numOfBedrooms: {
     type: String,

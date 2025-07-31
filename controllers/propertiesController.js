@@ -78,80 +78,10 @@ exports.resizePhotosAndUpload = catchAsync(async (req, res, next) => {
 // ***********************************************************************************
 
 // Create property
-exports.addPropertyFromEditor = catchAsync(async (req, res, next) => {
-  const {
-    description,
-    category,
-    typeOfProcess,
-    price,
-    area,
-    numOfBedrooms,
-    numOfBathrooms,
-    city,
-    mobileNumber,
-    codeOfProperty,
-  } = req.body;
-
-  const { photos } = req.body;
-
+exports.addProperty = catchAsync(async (req, res, next) => {
   const property = await Property.create({
     userId: req.user.id,
-    description,
-    category,
-    typeOfProcess,
-    price,
-    area,
-    numOfBedrooms,
-    numOfBathrooms,
-    city,
-    photos,
-    mobileNumber,
-    codeOfProperty,
-  });
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      property,
-    },
-  });
-});
-
-exports.addPropertyFromAdmin = catchAsync(async (req, res, next) => {
-  const {
-    description,
-    location,
-    region,
-    category,
-    typeOfProcess,
-    price,
-    area,
-    numOfBedrooms,
-    numOfBathrooms,
-    city,
-    mobileNumber,
-    ownerNumber,
-    codeOfProperty,
-  } = req.body;
-
-  const { photos } = req.body;
-
-  const property = await Property.create({
-    userId: req.user.id,
-    description,
-    location,
-    region,
-    category,
-    typeOfProcess,
-    price,
-    area,
-    numOfBedrooms,
-    numOfBathrooms,
-    city,
-    photos,
-    mobileNumber,
-    ownerNumber,
-    codeOfProperty,
+    ...req.body,
   });
 
   res.status(201).json({

@@ -2,6 +2,7 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 const User = require('../models/userModel');
+const Property = require('../models/propertyModel');
 
 exports.getAllClients = catchAsync(async (req, res, next) => {
   const existClients = await User.find({ accountType: 'عميل' });
@@ -70,12 +71,23 @@ exports.respondOfRequests = catchAsync(async (req, res, next) => {
 exports.getTotalNum = catchAsync(async (req, res, next) => {
   const existClients = await User.find({ accountType: 'عميل' });
   const existEditors = await User.find({ accountType: 'محرر' });
-  const existAdmin = await User.find({ accountType: 'مسؤول النظام' });
+  const existAdmin = await User.find({
+    accountType: 'مسؤول النظام',
+    status: 'accept',
+  });
+  const waitAdmin = await User.find({
+    accountType: 'مسؤول النظام',
+    status: 'pending',
+  });
+
+  const allProperties = await Property.find();
 
   res.status(200).json({
     status: 'success',
     Clients: existClients.length,
     Editors: existEditors.length,
     Admins: existAdmin.length,
+    SuspendedAdmin: waitAdmin.length,
+    Properties: allProperties.length,
   });
 });

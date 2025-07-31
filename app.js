@@ -11,6 +11,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const userRoutes = require('./routes/userRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(xss());
 // 3) ROUTES
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/properties', propertyRoutes);
+app.use('/api/v1/favorites', favoriteRoutes);
 
 // Handler for Unhandled Routes
 app.all('*', (req, res, next) => {

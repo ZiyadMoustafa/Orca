@@ -8,19 +8,13 @@ const router = express.Router();
 router.use(authController.protect);
 
 router.post(
-  '/AddPropertyFromAdmin',
-  authController.restrictTo('مسؤول النظام'),
+  '/AddProperty',
+  authController.restrictTo('مسؤول النظام', 'محرر'),
   propertyController.uploadPhoto,
   propertyController.resizePhotosAndUpload,
-  propertyController.addPropertyFromAdmin,
+  propertyController.addProperty,
 );
-router.post(
-  '/AddPropertyFromEditor',
-  authController.restrictTo('محرر'),
-  propertyController.uploadPhoto,
-  propertyController.resizePhotosAndUpload,
-  propertyController.addPropertyFromEditor,
-);
+
 router.get('/getAllProperties', propertyController.getAllProperties);
 router.get('/getPropertyById/:id', propertyController.getPropertyById);
 
