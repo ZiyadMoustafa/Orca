@@ -5,6 +5,7 @@ const cloud = require('../utils/cloud');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const Property = require('../models/propertyModel');
+const Counter = require('../models/counterModel');
 
 // ***********************************************************************************
 const multerStorage = multer.memoryStorage();
@@ -79,8 +80,29 @@ exports.resizePhotosAndUpload = catchAsync(async (req, res, next) => {
 
 // Create property
 exports.addProperty = catchAsync(async (req, res, next) => {
+  const exists = await Property.findOne({
+    userId: req.user.id,
+    region: req.body.region.toLowerCase(),
+    unit: req.body.unit.toLowerCase(),
+    floor: req.body.floor,
+    price: req.body.price,
+  });
+  if (exists) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'هذا العقار مضاف مسبقاً.',
+    });
+  }
+
+  const counter = await Counter.findOneAndUpdate(
+    { name: 'propertyNumber' },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true },
+  );
+
   const property = await Property.create({
     userId: req.user.id,
+    propertyNumber: counter.seq,
     ...req.body,
   });
 

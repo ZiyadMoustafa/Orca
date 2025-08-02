@@ -14,9 +14,25 @@ const propertySchema = new mongoose.Schema({
   },
   location: {
     type: String,
+    required: true,
+    trim: true,
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true,
   },
   region: {
     type: String,
+    required: true,
+    lowercase: true,
+    trim: true,
+  },
+  unit: {
+    type: String,
+    required: true,
+    lowercase: true,
+    trim: true,
   },
   category: {
     type: String,
@@ -26,9 +42,12 @@ const propertySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  price: {
+  detailsOfProcess: {
     type: String,
     required: true,
+  },
+  price: {
+    type: String,
   },
   totalPrice: {
     type: String,
@@ -41,7 +60,6 @@ const propertySchema = new mongoose.Schema({
   },
   area: {
     type: String,
-    required: true,
   },
   landArea: {
     type: String,
@@ -51,15 +69,12 @@ const propertySchema = new mongoose.Schema({
   },
   numOfBedrooms: {
     type: String,
-    required: true,
   },
   numOfBathrooms: {
     type: String,
-    required: true,
   },
-  city: {
+  floor: {
     type: String,
-    required: true,
   },
   addedAt: {
     type: Date,
@@ -80,6 +95,7 @@ const propertySchema = new mongoose.Schema({
   },
   ownerNumber: {
     type: String,
+    required: [true, 'Mobile number is required'],
     validate: {
       validator: function (el) {
         return validator.isMobilePhone(el, 'ar-EG');
@@ -87,8 +103,17 @@ const propertySchema = new mongoose.Schema({
       message: 'Invalid Egyptian phone number format',
     },
   },
-  codeOfProperty: {
+  secondOwnerNumber: {
     type: String,
+    validate: {
+      validator: function (el) {
+        return validator.isMobilePhone(el, 'ar-EG');
+      },
+      message: 'Invalid Egyptian phone number format',
+    },
+  },
+  propertyNumber: {
+    type: Number,
   },
 });
 
