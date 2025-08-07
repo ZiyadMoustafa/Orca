@@ -1,5 +1,6 @@
 const multer = require('multer');
 const sharp = require('sharp');
+const { v4: uuidv4 } = require('uuid');
 const cloud = require('../utils/cloud');
 
 const AppError = require('../utils/appError');
@@ -23,6 +24,10 @@ const multerFilter = (req, file, cb) => {
 const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 10,
+  },
 });
 
 exports.uploadPhoto = upload.array('photos');
@@ -48,6 +53,8 @@ const uploadToCloudinary = (buffer, filename, folderPath) =>
 
 // Middleware to Process and Upload Image to Cloudinary
 exports.resizePhotosAndUpload = catchAsync(async (req, res, next) => {
+  const { fileTypeFromBuffer } = await import('file-type');
+
   if (!req.files || req.files.length === 0) return next();
 
   const { category } = req.body;
@@ -55,24 +62,36 @@ exports.resizePhotosAndUpload = catchAsync(async (req, res, next) => {
   const folderPath = `Orca/العقارات/${category}`;
 
   const uploadPromises = req.files.map(async (file) => {
+    // 1) تحقق من نوع الملف عن طريق تحليل محتوي الملف
+    const fileType = await fileTypeFromBuffer(file.buffer);
+    if (!fileType || !['image/jpeg', 'image/png'].includes(fileType.mime)) {
+      throw new AppError('نوع الصورة غير مدعوم', 400);
+    }
+
+    // 2) نظف الصورة
     const imageBuffer = await sharp(file.buffer)
       .toFormat('jpeg')
-      .jpeg({ quality: 90 })
+      .jpeg({ quality: 80 })
       .toBuffer();
+
+    // 3) اسم عشوائي آمن
+    const uniqueFileName = uuidv4();
 
     const result = await uploadToCloudinary(
       imageBuffer,
-      file.originalname,
+      uniqueFileName,
       folderPath,
     );
 
     return result.secure_url;
   });
 
-  const uploadedImages = await Promise.all(uploadPromises);
+  const uploadedImages = await Promise.allSettled(uploadPromises);
 
   // Add image URLs to req.body
-  req.body.photos = uploadedImages;
+  req.body.photos = uploadedImages
+    .filter((r) => r.status === 'fulfilled')
+    .map((r) => r.value);
 
   next();
 });
@@ -118,7 +137,7 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 exports.getAllProperties = catchAsync(async (req, res, next) => {
   const properties = await Property.find()
     .select(
-      'description typeOfProcess price area numOfBedrooms numOfBathrooms userId',
+      'description location category typeOfProcess price area propertyNumber numOfBedrooms numOfBathrooms userId',
     )
     .populate({
       path: 'userId',
@@ -142,7 +161,7 @@ exports.getPropertyById = catchAsync(async (req, res, next) => {
   });
 
   if (userRole === 'عميل' || userRole === 'محرر') {
-    query = query.select('-location -region -ownerNumber');
+    query = query.select('-unit -region -ownerNumber -secondOwnerNumber');
   }
 
   const property = await query;

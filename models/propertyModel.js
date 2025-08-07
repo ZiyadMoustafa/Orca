@@ -49,9 +49,6 @@ const propertySchema = new mongoose.Schema({
   price: {
     type: String,
   },
-  totalPrice: {
-    type: String,
-  },
   paidPrice: {
     type: String,
   },
