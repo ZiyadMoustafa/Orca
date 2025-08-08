@@ -212,6 +212,15 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
 exports.deleteProperty = catchAsync(async (req, res, next) => {
   const propertyId = req.params.id;
 
+  if (req.user.accountType === 'محرر') {
+    const isYourProperty = await Property.findOne({
+      userId: req.user.id,
+      _id: propertyId,
+    });
+
+    if (!isYourProperty)
+      return next(new AppError('لا يمكنك حذف عقار لا تملكه', 404));
+  }
   const deleted = await Property.findByIdAndDelete(propertyId);
 
   if (!deleted) {
