@@ -114,14 +114,14 @@ exports.addProperty = catchAsync(async (req, res, next) => {
   }
 
   const counter = await Counter.findOneAndUpdate(
-    { name: 'propertyNumber' },
+    { name: 'CodeOfProperty' },
     { $inc: { seq: 1 } },
     { new: true, upsert: true },
   );
 
   const property = await Property.create({
     userId: req.user.id,
-    propertyNumber: counter.seq,
+    CodeOfProperty: counter.seq,
     ...req.body,
   });
 
@@ -137,12 +137,13 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 exports.getAllProperties = catchAsync(async (req, res, next) => {
   const properties = await Property.find()
     .select(
-      'description location category typeOfProcess price area propertyNumber numOfBedrooms numOfBathrooms userId',
+      'description location category typeOfProcess price area CodeOfProperty numOfBedrooms numOfBathrooms userId',
     )
     .populate({
       path: 'userId',
       select: 'fullName',
-    });
+    })
+    .sort({ CodeOfProperty: 1 });
 
   res.status(200).json({
     status: 'success',
@@ -161,7 +162,9 @@ exports.getPropertyById = catchAsync(async (req, res, next) => {
   });
 
   if (userRole === 'عميل' || userRole === 'محرر') {
-    query = query.select('-unit -region -ownerNumber -secondOwnerNumber');
+    query = query.select(
+      '-unit -region -propertyNumber -ownerNumber -secondOwnerNumber',
+    );
   }
 
   const property = await query;

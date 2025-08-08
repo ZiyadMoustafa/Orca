@@ -112,6 +112,9 @@ const propertySchema = new mongoose.Schema({
   propertyNumber: {
     type: Number,
   },
+  CodeOfProperty: {
+    type: Number,
+  },
 });
 
 const Property = mongoose.model('Property', propertySchema);
