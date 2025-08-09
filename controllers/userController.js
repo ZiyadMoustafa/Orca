@@ -5,7 +5,13 @@ const User = require('../models/userModel');
 const Property = require('../models/propertyModel');
 
 exports.getAllClients = catchAsync(async (req, res, next) => {
-  const existClients = await User.find({ accountType: 'عميل' });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const existClients = await User.find({ accountType: 'عميل' })
+    .skip(skip)
+    .limit(limit);
 
   if (!existClients || existClients.length === 0)
     return next(new AppError('لا يوجد عملاء في الوقت الحالي', 404));
@@ -18,7 +24,13 @@ exports.getAllClients = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllEditors = catchAsync(async (req, res, next) => {
-  const existEditors = await User.find({ accountType: 'محرر' });
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const existEditors = await User.find({ accountType: 'محرر' })
+    .skip(skip)
+    .limit(limit);
 
   if (!existEditors || existEditors.length === 0)
     return next(new AppError('لا يوجد محررين في الوقت الحالي', 404));

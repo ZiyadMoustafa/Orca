@@ -113,17 +113,18 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     });
   }
 
+  let property = await Property.create({
+    userId: req.user.id,
+    ...req.body,
+  });
+
   const counter = await Counter.findOneAndUpdate(
     { name: 'CodeOfProperty' },
     { $inc: { seq: 1 } },
     { new: true, upsert: true },
   );
 
-  const property = await Property.create({
-    userId: req.user.id,
-    CodeOfProperty: counter.seq,
-    ...req.body,
-  });
+  ((property.CodeOfProperty = counter.seq), await property.save());
 
   res.status(201).json({
     status: 'success',
@@ -135,6 +136,10 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 
 // get all properties for home
 exports.getAllProperties = catchAsync(async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
   const properties = await Property.find()
     .select(
       'description location category typeOfProcess price area CodeOfProperty numOfBedrooms numOfBathrooms userId',
@@ -143,7 +148,9 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
       path: 'userId',
       select: 'fullName',
     })
-    .sort({ CodeOfProperty: 1 });
+    .sort({ CodeOfProperty: 1 })
+    .skip(skip)
+    .limit(limit);
 
   res.status(200).json({
     status: 'success',
