@@ -20,12 +20,12 @@ router.get('/getPropertyById/:id', propertyController.getPropertyById);
 
 router.patch(
   '/updateProperty/:id',
-  authController.restrictTo('مسؤول النظام', 'محرر'),
+  authController.restrictTo('مسؤول النظام'),
   propertyController.updateProperty,
 );
 router.delete(
   '/deleteProperty/:id',
-  authController.restrictTo('مسؤول النظام', 'محرر'),
+  authController.restrictTo('مسؤول النظام'),
   propertyController.deleteProperty,
 );
 

@@ -81,25 +81,25 @@ exports.respondOfRequests = catchAsync(async (req, res, next) => {
 });
 
 exports.getTotalNum = catchAsync(async (req, res, next) => {
-  const existClients = await User.find({ accountType: 'عميل' });
-  const existEditors = await User.find({ accountType: 'محرر' });
-  const existAdmin = await User.find({
+  const existClients = await User.countDocuments({ accountType: 'عميل' });
+  const existEditors = await User.countDocuments({ accountType: 'محرر' });
+  const existAdmin = await User.countDocuments({
     accountType: 'مسؤول النظام',
     status: 'accept',
   });
-  const waitAdmin = await User.find({
+  const waitAdmin = await User.countDocuments({
     accountType: 'مسؤول النظام',
     status: 'pending',
   });
 
-  const allProperties = await Property.find();
+  const allProperties = await Property.countDocuments();
 
   res.status(200).json({
     status: 'success',
-    Clients: existClients.length,
-    Editors: existEditors.length,
-    Admins: existAdmin.length,
-    SuspendedAdmin: waitAdmin.length,
-    Properties: allProperties.length,
+    Clients: existClients,
+    Editors: existEditors,
+    Admins: existAdmin,
+    SuspendedAdmin: waitAdmin,
+    Properties: allProperties,
   });
 });

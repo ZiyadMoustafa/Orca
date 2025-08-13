@@ -110,7 +110,7 @@ const propertySchema = new mongoose.Schema({
     },
   },
   propertyNumber: {
-    type: Number,
+    type: String,
   },
   CodeOfProperty: {
     type: Number,

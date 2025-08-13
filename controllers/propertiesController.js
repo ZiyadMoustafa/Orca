@@ -101,10 +101,8 @@ exports.resizePhotosAndUpload = catchAsync(async (req, res, next) => {
 exports.addProperty = catchAsync(async (req, res, next) => {
   const exists = await Property.findOne({
     userId: req.user.id,
-    region: req.body.region.toLowerCase(),
     unit: req.body.unit.toLowerCase(),
-    floor: req.body.floor,
-    price: req.body.price,
+    propertyNumber: req.body.propertyNumber,
   });
   if (exists) {
     return res.status(400).json({
@@ -219,15 +217,6 @@ exports.updateProperty = catchAsync(async (req, res, next) => {
 exports.deleteProperty = catchAsync(async (req, res, next) => {
   const propertyId = req.params.id;
 
-  if (req.user.accountType === 'محرر') {
-    const isYourProperty = await Property.findOne({
-      userId: req.user.id,
-      _id: propertyId,
-    });
-
-    if (!isYourProperty)
-      return next(new AppError('لا يمكنك حذف عقار لا تملكه', 404));
-  }
   const deleted = await Property.findByIdAndDelete(propertyId);
 
   if (!deleted) {
