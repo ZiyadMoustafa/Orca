@@ -25,13 +25,13 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-const limiter = rateLimit({
-  limit: 5,
-  windowMs: 15 * 60 * 1000,
-  message: 'لقد تجاوزت عدد المحاولات المسموح بها، حاول لاحقًا ',
-});
+// const limiter = rateLimit({
+//   limit: 5,
+//   windowMs: 15 * 60 * 1000,
+//   message: 'لقد تجاوزت عدد المحاولات المسموح بها، حاول لاحقًا ',
+// });
 
-app.use('/api/v1/users/login', limiter); // apply limiter to all routes start with /api
+// app.use('/api/v1/users/login', limiter); // apply limiter to all routes start with /api
 
 // Putting all data in the body into request obj to read it
 app.use(express.json());
