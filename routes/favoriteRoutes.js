@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.post('/addToFavorites', favoriteController.addToFavorites);
+router.post('/addToFavorites/:id', favoriteController.addToFavorites);
 router.get('/myFavorites', favoriteController.getMyFavorites);
 router.delete('/remove/:id', favoriteController.removeFromFavorites);
 

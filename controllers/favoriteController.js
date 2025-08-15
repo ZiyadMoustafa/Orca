@@ -5,42 +5,44 @@ const Favorite = require('../models/favoriteModel');
 
 exports.addToFavorites = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
-  const { propertyId } = req.body;
 
   //   check if property exist
-  const property = await Property.findById(propertyId);
+  const property = await Property.findById(req.params.id);
   if (!property) return next(new AppError('العقار غير موجود', 404));
 
   //   check if property added
   const alreadyExists = await Favorite.findOne({
     user: userId,
-    property: propertyId,
+    property: req.params.id,
   });
   if (alreadyExists)
     return next(new AppError('تمت إضافة هذا العقار إلى المفضلة مسبقًا', 400));
 
   // add certain prpoerty to fav
-  const favorite = await Favorite.create({
+  await Favorite.create({
     user: userId,
-    property: propertyId,
+    property: req.params.id,
   });
 
   res.status(201).json({
     status: 'success',
     message: 'تمت إضافة العقار إلى المفضلة',
-    data: {
-      favorite,
-    },
   });
 });
 
 exports.getMyFavorites = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
-  const favorites = await Favorite.find({ user: userId }).populate({
-    path: 'property',
-    select: 'description price area numOfBedrooms numOfBathrooms city photos',
-  });
+  const favorites = await Favorite.find({ user: userId })
+    .populate({
+      path: 'property',
+      select:
+        'description location category typeOfProcess price area CodeOfProperty numOfBedrooms numOfBathrooms',
+    })
+    .populate({
+      path: 'user',
+      select: 'fullName',
+    });
 
   res.status(200).json({
     status: 'success',
@@ -53,11 +55,10 @@ exports.getMyFavorites = catchAsync(async (req, res, next) => {
 
 exports.removeFromFavorites = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
-  const { propertyId } = req.params;
 
   const deleted = await Favorite.findOneAndDelete({
     user: userId,
-    property: propertyId,
+    property: req.params.id,
   });
 
   if (!deleted) {
