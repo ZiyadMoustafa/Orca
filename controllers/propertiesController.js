@@ -101,6 +101,7 @@ exports.resizePhotosAndUpload = catchAsync(async (req, res, next) => {
 exports.addProperty = catchAsync(async (req, res, next) => {
   const exists = await Property.findOne({
     userId: req.user.id,
+    region: req.body.region.toLowerCase(),
     unit: req.body.unit.toLowerCase(),
     propertyNumber: req.body.propertyNumber,
   });
@@ -134,11 +135,41 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 
 // get all properties for home
 exports.getAllProperties = catchAsync(async (req, res, next) => {
+  let { category, city, search, CodeOfProperty } = req.query;
+
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const skip = (page - 1) * limit;
 
-  const properties = await Property.find()
+  let query = {};
+
+  if (category) {
+    query.category = category;
+  }
+
+  if (city) {
+    query.city = city;
+  }
+
+  if (CodeOfProperty) {
+    query.CodeOfProperty = CodeOfProperty;
+  }
+
+  if (search) {
+    query.$or = [
+      { description: { $regex: search, $options: 'i' } },
+      { location: { $regex: search, $options: 'i' } },
+      { city: { $regex: search, $options: 'i' } },
+      { region: { $regex: search, $options: 'i' } },
+      { unit: { $regex: search, $options: 'i' } },
+      { typeOfProcess: { $regex: search, $options: 'i' } },
+      { detailsOfProcess: { $regex: search, $options: 'i' } },
+      { price: { $regex: search, $options: 'i' } },
+      { propertyNumber: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  const properties = await Property.find(query)
     .select(
       'description location category typeOfProcess price area CodeOfProperty numOfBedrooms numOfBathrooms userId',
     )
