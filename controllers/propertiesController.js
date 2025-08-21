@@ -171,7 +171,7 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
 
   const properties = await Property.find(query)
     .select(
-      'description location category typeOfProcess price area CodeOfProperty numOfBedrooms numOfBathrooms userId',
+      'description city category typeOfProcess price area CodeOfProperty numOfBedrooms numOfBathrooms userId',
     )
     .populate({
       path: 'userId',
