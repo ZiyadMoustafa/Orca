@@ -37,4 +37,10 @@ router.get(
   userController.getTotalNum,
 );
 
+router.delete(
+  '/deleteAccount/:id',
+  authController.restrictTo('مسؤول النظام'),
+  userController.deleteAccount,
+);
+
 module.exports = router;

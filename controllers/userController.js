@@ -103,3 +103,20 @@ exports.getTotalNum = catchAsync(async (req, res, next) => {
     Properties: allProperties,
   });
 });
+
+exports.deleteAccount = catchAsync(async (req, res, next) => {
+  const userId = req.params.id;
+
+  const deleted = await User.findByIdAndDelete(userId);
+
+  if (!deleted) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'المستخدم غير موجود',
+    });
+  }
+
+  res.status(204).json({
+    status: 'success',
+  });
+});
