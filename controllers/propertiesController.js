@@ -166,6 +166,8 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
       { detailsOfProcess: { $regex: search, $options: 'i' } },
       { price: { $regex: search, $options: 'i' } },
       { area: { $regex: search, $options: 'i' } },
+      { landArea: { $regex: search, $options: 'i' } },
+      { buildingArea: { $regex: search, $options: 'i' } },
       { propertyNumber: { $regex: search, $options: 'i' } },
     ];
   }
