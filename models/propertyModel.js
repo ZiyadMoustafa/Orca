@@ -85,9 +85,9 @@ const propertySchema = new mongoose.Schema({
     required: [true, 'Mobile number is required'],
     validate: {
       validator: function (el) {
-        return validator.isMobilePhone(el, 'ar-EG');
+        return validator.isMobilePhone(el);
       },
-      message: 'Invalid Egyptian phone number format',
+      message: 'Invalid phone number format',
     },
   },
   ownerNumber: {
@@ -95,18 +95,18 @@ const propertySchema = new mongoose.Schema({
     required: [true, 'Mobile number is required'],
     validate: {
       validator: function (el) {
-        return validator.isMobilePhone(el, 'ar-EG');
+        return validator.isMobilePhone(el);
       },
-      message: 'Invalid Egyptian phone number format',
+      message: 'Invalid phone number format',
     },
   },
   secondOwnerNumber: {
     type: String,
     validate: {
       validator: function (el) {
-        return validator.isMobilePhone(el, 'ar-EG');
+        return validator.isMobilePhone(el);
       },
-      message: 'Invalid Egyptian phone number format',
+      message: 'Invalid phone number format',
     },
   },
   propertyNumber: {

@@ -26,9 +26,9 @@ const userSchema = new mongoose.Schema(
       unique: true,
       validate: {
         validator: function (el) {
-          return validator.isMobilePhone(el, 'ar-EG'); // "ar-EG" ensures only Egyptian numbers are allowed
+          return validator.isMobilePhone(el);
         },
-        message: 'Invalid Egyptian phone number format',
+        message: 'Invalid phone number format',
       },
     },
 
