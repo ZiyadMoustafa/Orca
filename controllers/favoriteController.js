@@ -16,7 +16,7 @@ exports.addToFavorites = catchAsync(async (req, res, next) => {
     property: req.params.id,
   });
   if (alreadyExists)
-    return next(new AppError('تمت إضافة هذا العقار إلى المفضلة مسبقًا', 400));
+    return next(new AppError('تمت إضافة هذا العقار إلى المؤجلات مسبقًا', 400));
 
   // add certain prpoerty to fav
   await Favorite.create({
@@ -26,7 +26,7 @@ exports.addToFavorites = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'success',
-    message: 'تمت إضافة العقار إلى المفضلة',
+    message: 'تمت إضافة العقار إلى المؤجلات',
   });
 });
 

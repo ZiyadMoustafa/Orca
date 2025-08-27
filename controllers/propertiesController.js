@@ -7,6 +7,7 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const Property = require('../models/propertyModel');
 const Counter = require('../models/counterModel');
+const Favorite = require('../models/favoriteModel');
 
 // ***********************************************************************************
 const multerStorage = multer.memoryStorage();
@@ -252,6 +253,7 @@ exports.deleteProperty = catchAsync(async (req, res, next) => {
   const propertyId = req.params.id;
 
   const deleted = await Property.findByIdAndDelete(propertyId);
+  await Favorite.findOneAndDelete({ property: propertyId });
 
   if (!deleted) {
     return res.status(404).json({
