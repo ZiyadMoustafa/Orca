@@ -29,8 +29,7 @@ This project was developed as a real-world solution for a real estate office.
   - Role-based authorization to protect resources.  
 
 - **Admin Approval Workflows**  
-  - Admin approves new accounts before granting full access.  
-  - Admin can approve or reject properties added by editors.  
+  - Admin approves new accounts before granting full access. 
 
 - **Property Management (CRUD)**  
   - Create, Read, Update, Delete properties.  
@@ -47,7 +46,7 @@ This project was developed as a real-world solution for a real estate office.
 - **Admin Dashboard**  
   - Monitor all registered users.  
   - View and manage all properties.  
-  - Insights into system usage.  
+  - Platform statistics and insights.  
 
 ---
 
