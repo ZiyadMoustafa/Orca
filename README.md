@@ -94,5 +94,4 @@ For any inquiries or collaboration opportunities, feel free to reach out:
 
 - **👤 Name:** Ziyad Moustafa Ahmed Ali  
 - **📧 Email:** ziyadmoustafa77@gmail.com  
-- **💼 LinkedIn:** [linkedin.com/in/ziyadmoustafa](https://linkedin.com/in/ziyadmoustafa)  
-- **💻 GitHub:** [github.com/ZiyadMoustafa](https://github.com/ZiyadMoustafa)  
+- **💼 LinkedIn:** [Ziyad Moustafa](www.linkedin.com/in/ziyad-moustafa)
