@@ -74,9 +74,8 @@ backend/
 ├── routes/          # API routes
 ├── utils/           # Helper functions
 ├── app.js           # App configuration
-├── server.js        # Main server entry point
+├── index.js        # Main server entry point
 ├── package.json     # Dependencies
-└── config.env       # Environment variables
 ```
 
 ## 🔒 Security Measures
