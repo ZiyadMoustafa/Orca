@@ -92,5 +92,4 @@ backend/
 For any inquiries or collaboration opportunities, feel free to reach out:  
 
 - **👤 Name:** Ziyad Moustafa Ahmed Ali  
-- **📧 Email:** ziyadmoustafa77@gmail.com  
-- **💼 LinkedIn:** [Ziyad Moustafa](www.linkedin.com/in/ziyad-moustafa)
+- **📧 Email:** ziyadmoustafa77@gmail.com
