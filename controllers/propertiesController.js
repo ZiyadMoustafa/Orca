@@ -181,7 +181,7 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
       path: 'userId',
       select: 'fullName',
     })
-    .sort({ CodeOfProperty: 1 })
+    .sort({ CodeOfProperty: -1 })
     .skip(skip)
     .limit(limit);
 
